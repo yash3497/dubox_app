@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:dubox_app/screens/cart/cart_screen.dart';
 import 'package:dubox_app/utils/colors.dart';
 import 'package:dubox_app/utils/constant.dart';
 import 'package:dubox_app/widgets/dashboard_item_card.dart';
@@ -8,11 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 
+import '../../services/cart_service.dart';
+
 class ItemDetailScreen extends StatefulWidget {
   final Map item;
   final String category;
-  const ItemDetailScreen(
-      {super.key, required this.item, required this.category});
+  const ItemDetailScreen({
+    super.key,
+    required this.item,
+    required this.category,
+  });
 
   @override
   State<ItemDetailScreen> createState() => _ItemDetailScreenState();
@@ -21,6 +27,23 @@ class ItemDetailScreen extends StatefulWidget {
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
   List similarItems = [];
   bool isadded = false;
+
+  _fetchProductAdded() async {
+    if (Get.put(CartService()).cartMap == null ||
+        Get.put(CartService()).cartMap["${widget.item['id']}"] == null ||
+        Get.put(CartService()).cartMap["${widget.item['id']}"]['quantity'] ==
+            null ||
+        Get.put(CartService()).cartMap["${widget.item['id']}"]['quantity'] ==
+            0) {
+      setState(() {
+        isadded = false;
+      });
+    } else {
+      setState(() {
+        isadded = true;
+      });
+    }
+  }
 
   _fetchSimilarItem() async {
     List dummyList = [];
@@ -39,6 +62,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     // TODO: implement initState
     super.initState();
     _fetchSimilarItem();
+    _fetchProductAdded();
   }
 
   @override
@@ -135,9 +159,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         horizontal: 10, vertical: 10),
                     child: InkWell(
                       onTap: () {
-                        setState(() {
-                          isadded = !isadded;
-                        });
+                        if (isadded) {
+                          Get.to(() => const CartScreen(),
+                              transition: Transition.fade);
+                        } else {
+                          Get.find<CartService>().addItem(widget.item);
+                          _fetchProductAdded();
+                        }
                       },
                       child: Container(
                         height: 50,

@@ -86,7 +86,7 @@ List allItemList = [
     "title": "Shoes",
     "item": [
       {
-        "id": 1,
+        "id": 4,
         "name": "Sneakers",
         "price": 100000,
         "image":
@@ -97,7 +97,7 @@ List allItemList = [
         "originalPrice": "200000",
       },
       {
-        "id": 2,
+        "id": 5,
         "name": "Loafers",
         "price": 200000,
         "image":
@@ -108,7 +108,7 @@ List allItemList = [
         "originalPrice": "203000",
       },
       {
-        "id": 3,
+        "id": 6,
         "name": "Boots",
         "price": 300000,
         "image":
@@ -119,5 +119,48 @@ List allItemList = [
         "originalPrice": "500000",
       },
     ],
+  },
+];
+
+List couponList = [
+  {
+    "title": "Flat 10% Off",
+    "code": "FLAT10",
+    "discount": 10,
+    "minCartValue": 500,
+    "description":
+        "Get flat 10% off on all products. minimum of cart value ₹500",
+  },
+  {
+    "title": "Flat 20% Off",
+    "code": "FLAT20",
+    "discount": 20,
+    "minCartValue": 1000,
+    "description":
+        "Get flat 20% off on all products. minimum of cart value ₹1000",
+  },
+  {
+    "title": "Flat 30% Off",
+    "code": "FLAT30",
+    "discount": 30,
+    "minCartValue": 1500,
+    "description":
+        "Get flat 30% off on all products. minimum of cart value ₹1500",
+  },
+  {
+    "title": "Flat 40% Off",
+    "code": "FLAT40",
+    "discount": 40,
+    "minCartValue": 2000,
+    "description":
+        "Get flat 40% off on all products. minimum of cart value ₹2000",
+  },
+  {
+    "title": "Flat 50% Off",
+    "code": "FLAT50",
+    "discount": 50,
+    "minCartValue": 2500,
+    "description":
+        "Get flat 50% off on all products. minimum of cart value ₹2500",
   },
 ];

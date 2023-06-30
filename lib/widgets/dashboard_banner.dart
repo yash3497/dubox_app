@@ -40,10 +40,10 @@ class _DashboardBannerWidgetState extends State<DashboardBannerWidget> {
   }
 
   final List<String> _images = [
-    "http://www.duboxx.connectiavision.in/banner/2601060123Duboxxpackagingmaterialtrading.jpg",
-    "http://www.duboxx.connectiavision.in/banner/0901210522DuboxxMovingPacks.jpg",
-    "http://www.duboxx.connectiavision.in/banner/2905151220DuboxxCartonboxes.jpg",
-    "http://www.duboxx.connectiavision.in/banner/5202210522SLIDE-008.jpg",
+    "https://static.vecteezy.com/system/resources/previews/004/299/835/original/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-free-vector.jpg",
+    "https://static.vecteezy.com/system/resources/thumbnails/004/707/493/small/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-vector.jpg",
+    "https://static.vecteezy.com/system/resources/thumbnails/004/299/835/small/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-free-vector.jpg",
+    "https://static.vecteezy.com/system/resources/thumbnails/002/006/774/small/paper-art-shopping-online-on-smartphone-and-new-buy-sale-promotion-backgroud-for-banner-market-ecommerce-free-vector.jpg",
   ];
 
   @override

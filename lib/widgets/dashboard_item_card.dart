@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:dubox_app/services/cart_service.dart';
 import 'package:dubox_app/utils/colors.dart';
 import 'package:dubox_app/widgets/widget_constant.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/utils.dart';
+import 'package:get/get.dart';
 
 import '../screens/category/item_detail_screen.dart';
 
@@ -19,20 +19,6 @@ class DashboardItemCard extends StatefulWidget {
 }
 
 class _DashboardItemCardState extends State<DashboardItemCard> {
-  int quantity = 0;
-
-  _add() {
-    setState(() {
-      quantity++;
-    });
-  }
-
-  _remove() {
-    setState(() {
-      quantity--;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,124 +41,139 @@ class _DashboardItemCardState extends State<DashboardItemCard> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InkWell(
-              onTap: () {
-                Get.to(
-                    () => ItemDetailScreen(
-                          item: widget.item,
-                          category: widget.category,
-                        ),
-                    transition: Transition.downToUp);
-              },
-              child: Center(
-                child: Image.network(
-                  widget.item['image'],
-                  height: 150,
-                  width: 200,
-                  fit: BoxFit.cover,
+        child: GetBuilder<CartService>(builder: (controller) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.to(
+                      () => ItemDetailScreen(
+                            item: widget.item,
+                            category: widget.category,
+                          ),
+                      transition: Transition.downToUp);
+                },
+                child: Center(
+                  child: Image.network(
+                    widget.item['image'],
+                    height: 150,
+                    width: 200,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            HeightBox(10),
-            Text(
-              widget.item['name'],
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
+              HeightBox(10),
+              Text(
+                widget.item['name'],
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            Text(
-              widget.item['description'],
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            Text("${widget.item['discount']}% OFF",
-                style: TextStyle(
+              Text(
+                widget.item['description'],
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
                   fontSize: 14,
-                  color: AppColors.appBarColor,
-                )),
-            HeightBox(5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "₹${widget.item['price']}",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  color: Colors.grey,
                 ),
-                WidthBox(5),
-                Text(
-                  "₹${widget.item['originalPrice']}",
+              ),
+              Text("${widget.item['discount']}% OFF",
                   style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
+                    fontSize: 14,
+                    color: AppColors.appBarColor,
+                  )),
+              HeightBox(5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "₹${widget.item['price']}",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Spacer(),
-                quantity == 0
-                    ? InkWell(
-                        onTap: _add,
-                        child: Container(
-                          width: 40,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: AppColors.appBarColor,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      )
-                    : Row(
-                        children: [
-                          InkWell(
-                            onTap: _remove,
-                            child: const Icon(
-                              Icons.remove,
-                              color: Colors.black,
-                              size: 20,
+                  WidthBox(5),
+                  Text(
+                    "₹${widget.item['originalPrice']}",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                  Spacer(),
+                  controller.cartMap == null ||
+                          controller.cartMap["${widget.item['id']}"] == null ||
+                          controller.cartMap["${widget.item['id']}"]
+                                  ['quantity'] ==
+                              null ||
+                          controller.cartMap["${widget.item['id']}"]
+                                  ['quantity'] ==
+                              0
+                      ? InkWell(
+                          onTap: () {
+                            Get.put(CartService()).addItem(widget.item);
+                          },
+                          child: Container(
+                            width: 40,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: AppColors.appBarColor,
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                          ),
-                          WidthBox(5),
-                          Text(
-                            quantity.toString(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          WidthBox(5),
-                          InkWell(
-                            onTap: _add,
                             child: const Icon(
                               Icons.add,
-                              color: Colors.black,
+                              color: Colors.white,
                               size: 20,
                             ),
                           ),
-                        ],
-                      ),
-              ],
-            ),
-          ],
-        ),
+                        )
+                      : Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Get.put(CartService()).removeItem(widget.item);
+                              },
+                              child: const Icon(
+                                Icons.remove,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            ),
+                            WidthBox(5),
+                            Text(
+                              "${controller.cartMap["${widget.item['id']}"]['quantity']}",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            WidthBox(5),
+                            InkWell(
+                              onTap: () {
+                                Get.put(CartService()).addItem(widget.item);
+                              },
+                              child: const Icon(
+                                Icons.add,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                ],
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

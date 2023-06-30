@@ -1,8 +1,11 @@
+import 'package:dubox_app/screens/cart/cart_screen.dart';
+import 'package:dubox_app/services/cart_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../utils/colors.dart';
 
-PreferredSize DashboardAppBar() {
+PreferredSize DashboardAppBar(GlobalKey<ScaffoldState> scaffoldKey) {
   return PreferredSize(
     preferredSize: Size.fromHeight(kToolbarHeight + 46.0),
     child: AppBar(
@@ -25,7 +28,9 @@ PreferredSize DashboardAppBar() {
               Align(
                 alignment: Alignment.center,
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => CartScreen());
+                  },
                   icon: const Icon(Icons.shopping_cart_outlined),
                 ),
               ),
@@ -38,14 +43,20 @@ PreferredSize DashboardAppBar() {
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: Text(
-                    "1",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: GetBuilder<CartService>(
+                      init: CartService(),
+                      builder: (controller) {
+                        return Text(
+                          controller.cartMap != null && controller.cartMap != {}
+                              ? "${controller.cartMap.entries.length}"
+                              : "0",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }),
                 ),
               ),
             ],
@@ -53,7 +64,9 @@ PreferredSize DashboardAppBar() {
         ),
       ],
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          scaffoldKey.currentState!.openDrawer();
+        },
         icon: const Icon(Icons.menu),
       ),
       flexibleSpace: Column(
